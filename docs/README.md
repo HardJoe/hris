@@ -1,6 +1,6 @@
 # HRIS Node.js Backend — Technical Overview
 
-Related documentation: [API contract](API_CONTRACT.md) and [database schema and seed data](DATABASE_SCHEMA.md).
+Related documentation: [API contract](API_CONTRACT.md), [database schema and seed data](DATABASE_SCHEMA.md), and [project assumptions](ASSUMPTIONS.md).
 
 ## What is implemented
 
