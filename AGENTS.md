@@ -5,6 +5,10 @@
 - Always use English for communication, source-code identifiers, comments, documentation, commit messages, API descriptions, validation messages, and newly created project content.
 - Preserve an external system's required literal values when changing them would break compatibility, but explain those values in English.
 
+## Git
+
+- Use Conventional Commits for all commit messages (for example, `feat: add employee search` or `fix(auth): reject expired tokens`).
+
 ## Modules
 
 This is a simple HRIS application with the following modules:
@@ -12,9 +16,9 @@ This is a simple HRIS application with the following modules:
 1. Login module using email and password.
 2. Master data module:
    - Employees (CRUD).
-     Form fields: name, gender, date of birth, email, position, and competencies, including competency selection and certificate upload.
+     Form fields: name, gender, date of birth, email, position, and competencies. Each employee competency assignment includes a proficiency grade (`A`, `B`, `C`, or `D`) and an optional certificate upload.
    - Competencies (CRUD).
-     Form fields: competency name and grade (`A`, `B`, `C`, or `D`).
+     Form fields: competency name.
 3. Dashboard:
    - Current employee count.
    - Employee counts for specific positions: Junior Programmer, Mid-level Programmer, and Senior Programmer.

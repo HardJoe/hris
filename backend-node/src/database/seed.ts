@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import * as argon2 from 'argon2';
-import { Grade } from '../common/enums/grade.enum';
 import { Competency } from '../competencies/entities/competency.entity';
 import { User } from '../users/entities/user.entity';
 import { appDataSource } from './data-source';
@@ -13,9 +12,9 @@ async function seed(): Promise<void> {
       .createQueryBuilder()
       .insert()
       .values([
-        { name: 'Spring Boot', grade: Grade.A },
-        { name: 'ReactJS', grade: Grade.A },
-        { name: 'Node.js', grade: Grade.A },
+        { name: 'Spring Boot' },
+        { name: 'ReactJS' },
+        { name: 'Node.js' },
       ])
       .orIgnore()
       .execute();

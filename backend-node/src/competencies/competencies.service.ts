@@ -24,9 +24,6 @@ export class CompetenciesService {
     if (query.search) {
       builder.andWhere('competency.name ILIKE :search', { search: `%${query.search}%` });
     }
-    if (query.grade) {
-      builder.andWhere('competency.grade = :grade', { grade: query.grade });
-    }
 
     const [items, totalItems] = await builder
       .orderBy('competency.name', 'ASC')

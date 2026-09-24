@@ -44,7 +44,7 @@ Errors use:
 - Gender: `MALE`, `FEMALE`
 - Position: `JUNIOR_PROGRAMMER`, `MID_PROGRAMMER`, `SENIOR_PROGRAMMER`
 - Employment status: `ACTIVE`, `INACTIVE`
-- Competency grade: `A`, `B`, `C`, `D`
+- Employee competency proficiency grade: `A`, `B`, `C`, `D`
 
 Dates use ISO `YYYY-MM-DD`. Identifiers use UUID v4.
 
@@ -58,7 +58,7 @@ Dates use ISO `YYYY-MM-DD`. Identifiers use UUID v4.
 | GET | `/employees/{id}` | Get employee | 200 |
 | PATCH | `/employees/{id}` | Partially update employee | 200 |
 | DELETE | `/employees/{id}` | Soft-delete employee | 204 |
-| PUT | `/employees/{employeeId}/competencies/{competencyId}` | Idempotently assign competency | 200 |
+| PUT | `/employees/{employeeId}/competencies/{competencyId}` | Idempotently assign or update a competency proficiency grade | 200 |
 | DELETE | `/employees/{employeeId}/competencies/{competencyId}` | Remove assignment and certificate | 204 |
 | POST | `/employees/{employeeId}/competencies/{competencyId}/certificate` | Upload/replace `certificate` form part | 201 |
 | GET | `/employees/{employeeId}/competencies/{competencyId}/certificate` | Authenticated attachment download | 200 |
@@ -73,7 +73,7 @@ Dates use ISO `YYYY-MM-DD`. Identifiers use UUID v4.
 
 Employee list query parameters: `page`, `limit` (maximum 100), `search`, `position`, `status`, `competencyId`.
 
-Competency list query parameters: `page`, `limit` (maximum 100), `search`, `grade`.
+Competency list query parameters: `page`, `limit` (maximum 100), `search`.
 
 Create employee body:
 
@@ -86,15 +86,25 @@ Create employee body:
   "position": "MID_PROGRAMMER",
   "status": "ACTIVE",
   "hiredAt": "2026-09-01",
-  "competencyIds": ["4c579f55-239a-4c53-87b5-bb1fa80bc09b"]
+  "competencies": [
+    { "competencyId": "4c579f55-239a-4c53-87b5-bb1fa80bc09b", "grade": "A" }
+  ]
 }
 ```
 
 Create competency body:
 
 ```json
-{ "name": "Spring Boot", "grade": "A" }
+{ "name": "Spring Boot" }
 ```
+
+Assign or update an employee competency body:
+
+```json
+{ "grade": "A" }
+```
+
+The grade represents that employee's proficiency in the selected competency. It is not a priority or classification of the competency master record.
 
 Login body and result:
 
@@ -115,4 +125,3 @@ Login body and result:
 Certificate policy: one file per employee/competency assignment, maximum configured size (5 MiB by default), allowed content signatures PDF/JPEG/PNG. Sending only a misleading filename or MIME header is rejected.
 
 Common failure codes: `400` invalid request/file, `401` invalid or missing credentials, `404` missing resource, `409` duplicate/in-use resource, `429` rate limited, `500` sanitized internal error.
-

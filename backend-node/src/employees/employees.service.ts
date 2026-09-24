@@ -3,10 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { ReadStream } from 'fs';
 import { Competency } from '../competencies/entities/competency.entity';
+import { Grade } from '../common/enums/grade.enum';
 import { PagedResult } from '../common/interfaces/paged-result.interface';
 import { CertificateStorageService } from './certificate-storage.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeQueryDto } from './dto/employee-query.dto';
+import { EmployeeCompetencyDto } from './dto/employee-competency.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeCompetency } from './entities/employee-competency.entity';
 import { Employee } from './entities/employee.entity';
@@ -33,17 +35,27 @@ export class EmployeesService {
 
   async create(input: CreateEmployeeDto): Promise<EmployeeView> {
     this.validateDates(input.dateOfBirth, input.hiredAt);
-    const { competencyIds = [], ...employeeInput } = input;
+    const { competencies = [], ...employeeInput } = input;
 
     const employeeId = await this.dataSource.transaction(async (manager) => {
-      await this.assertCompetenciesExist(competencyIds, manager.getRepository(Competency));
+      this.assertUniqueCompetencyAssignments(competencies);
+      await this.assertCompetenciesExist(
+        competencies.map((assignment) => assignment.competencyId),
+        manager.getRepository(Competency),
+      );
       const employee = await manager
         .getRepository(Employee)
         .save(manager.getRepository(Employee).create(employeeInput));
-      if (competencyIds.length > 0) {
+      if (competencies.length > 0) {
         await manager
           .getRepository(EmployeeCompetency)
-          .insert(competencyIds.map((competencyId) => ({ employeeId: employee.id, competencyId })));
+          .insert(
+            competencies.map(({ competencyId, grade }) => ({
+              employeeId: employee.id,
+              competencyId,
+              grade,
+            })),
+          );
       }
       return employee.id;
     });
@@ -107,7 +119,7 @@ export class EmployeesService {
       );
     }
 
-    const { competencyIds, ...employeeInput } = input;
+    const { competencies, ...employeeInput } = input;
     const filesToRemove = await this.dataSource.transaction(async (manager) => {
       const repository = manager.getRepository(Employee);
       const employee = await repository.findOneBy({ id });
@@ -116,19 +128,28 @@ export class EmployeesService {
       repository.merge(employee, employeeInput);
       await repository.save(employee);
 
-      if (!competencyIds) return [];
-      await this.assertCompetenciesExist(competencyIds, manager.getRepository(Competency));
+      if (!competencies) return [];
+      this.assertUniqueCompetencyAssignments(competencies);
+      await this.assertCompetenciesExist(
+        competencies.map((assignment) => assignment.competencyId),
+        manager.getRepository(Competency),
+      );
       const assignmentRepository = manager.getRepository(EmployeeCompetency);
       const existing = await assignmentRepository.findBy({ employeeId: id });
-      const retained = new Set(competencyIds);
+      const retained = new Set(competencies.map((assignment) => assignment.competencyId));
       const removed = existing.filter((item) => !retained.has(item.competencyId));
       if (removed.length > 0) await assignmentRepository.remove(removed);
       const currentIds = new Set(existing.map((item) => item.competencyId));
-      const added = competencyIds.filter((competencyId) => !currentIds.has(competencyId));
+      const added = competencies.filter((assignment) => !currentIds.has(assignment.competencyId));
       if (added.length > 0) {
         await assignmentRepository.insert(
-          added.map((competencyId) => ({ employeeId: id, competencyId })),
+          added.map(({ competencyId, grade }) => ({ employeeId: id, competencyId, grade })),
         );
+      }
+      for (const { competencyId, grade } of competencies) {
+        if (currentIds.has(competencyId)) {
+          await assignmentRepository.update({ employeeId: id, competencyId }, { grade });
+        }
       }
       return removed
         .map((item) => item.certificateStoredName)
@@ -155,10 +176,14 @@ export class EmployeesService {
     await Promise.all(filesToRemove.map((name) => this.certificateStorage.remove(name)));
   }
 
-  async assignCompetency(employeeId: string, competencyId: string): Promise<EmployeeView> {
+  async assignCompetency(
+    employeeId: string,
+    competencyId: string,
+    grade: Grade,
+  ): Promise<EmployeeView> {
     await this.getEntity(employeeId);
     await this.assertCompetenciesExist([competencyId], this.competenciesRepository);
-    await this.assignmentsRepository.upsert({ employeeId, competencyId }, [
+    await this.assignmentsRepository.upsert({ employeeId, competencyId, grade }, [
       'employeeId',
       'competencyId',
     ]);
@@ -180,13 +205,12 @@ export class EmployeesService {
   ): Promise<EmployeeView> {
     await this.getEntity(employeeId);
     await this.assertCompetenciesExist([competencyId], this.competenciesRepository);
+    const assignment = await this.assignmentsRepository.findOneBy({ employeeId, competencyId });
+    if (!assignment) throw new NotFoundException('Employee competency assignment not found');
     const stored = await this.certificateStorage.store(file);
-    let previousStoredName: string | null;
+    const previousStoredName = assignment.certificateStoredName;
 
     try {
-      let assignment = await this.assignmentsRepository.findOneBy({ employeeId, competencyId });
-      previousStoredName = assignment?.certificateStoredName ?? null;
-      assignment ??= this.assignmentsRepository.create({ employeeId, competencyId });
       Object.assign(assignment, {
         certificateStoredName: stored.storedName,
         certificateOriginalName: stored.originalName,
@@ -245,6 +269,13 @@ export class EmployeesService {
       throw new BadRequestException('One or more competencies do not exist');
   }
 
+  private assertUniqueCompetencyAssignments(competencies: EmployeeCompetencyDto[]): void {
+    const competencyIds = competencies.map((assignment) => assignment.competencyId);
+    if (new Set(competencyIds).size !== competencyIds.length) {
+      throw new BadRequestException('Each competency can only be assigned once');
+    }
+  }
+
   private validateDates(dateOfBirth: string, hiredAt: string): void {
     const today = new Date().toISOString().slice(0, 10);
     if (dateOfBirth >= today) throw new BadRequestException('dateOfBirth must be in the past');
@@ -265,7 +296,7 @@ export class EmployeesService {
       competencies: (employee.competencies ?? []).map((assignment) => ({
         id: assignment.competency.id,
         name: assignment.competency.name,
-        grade: assignment.competency.grade,
+        grade: assignment.grade,
         certificate: {
           available: !!assignment.certificateStoredName,
           originalName: assignment.certificateOriginalName,

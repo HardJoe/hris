@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Competency } from '../../competencies/entities/competency.entity';
+import { Grade } from '../../common/enums/grade.enum';
 import { Employee } from './employee.entity';
 
 @Entity({ name: 'employee_competencies' })
@@ -19,6 +20,9 @@ export class EmployeeCompetency {
   })
   @JoinColumn({ name: 'competency_id' })
   competency: Competency;
+
+  @Column({ type: 'enum', enum: Grade, enumName: 'competency_grade' })
+  grade: Grade;
 
   @Column({ name: 'certificate_stored_name', type: 'varchar', length: 255, nullable: true })
   certificateStoredName: string | null;

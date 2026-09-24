@@ -4,7 +4,7 @@
 
 - Administrator login using email/password and short-lived JWT access tokens.
 - Employee CRUD with filtering, pagination, soft deletion, status, position, hire date, and competency assignments.
-- Competency CRUD with grades A–D.
+- Competency CRUD and employee-specific competency proficiency grades A–D.
 - Authenticated certificate upload/download for PDF, JPEG, and PNG files.
 - Dashboard metrics for active headcount, position, competency, and hires in the last one/three calendar months.
 - PostgreSQL migration and idempotent seed process.
@@ -58,10 +58,9 @@ For a production deployment, add TLS at the ingress, managed secrets, malware sc
 - `hiredAt` is explicit because “new employee in the last month” cannot be derived correctly from a record creation timestamp.
 - “Current employees” means non-deleted employees with status `ACTIVE`.
 - Deleting an employee is a soft delete; associated certificate files and assignments are removed.
-- Competency grade belongs to the competency master because that is the supplied requirement. If grade is actually employee proficiency, it should move to `employee_competencies` in a future migration.
+- Competency grade represents the employee's proficiency and belongs to `employee_competencies`; the competency master only defines the skill.
 - Certificate upload is a separate endpoint. A frontend can first save the employee and assignments, then upload each selected file with clear retry/error behavior.
 
 ## Quality controls
 
 The repository includes strict TypeScript, ESLint type-aware rules, formatting, unit tests for file security, database constraints, explicit migrations, container healthchecks, and runtime readiness/liveness endpoints. The implementation was exercised end to end through Docker for authentication, authorization, CRUD, upload/download, conflict mapping, and dashboard aggregation.
-

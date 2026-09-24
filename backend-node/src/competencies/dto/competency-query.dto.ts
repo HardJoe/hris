@@ -1,6 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
-import { Grade } from '../../common/enums/grade.enum';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 
 export class CompetencyQueryDto extends PaginationQueryDto {
@@ -9,8 +8,4 @@ export class CompetencyQueryDto extends PaginationQueryDto {
   @IsString()
   @MaxLength(100)
   search?: string;
-
-  @IsOptional()
-  @IsEnum(Grade)
-  grade?: Grade;
 }

@@ -23,6 +23,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PagedResult } from '../common/interfaces/paged-result.interface';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeQueryDto } from './dto/employee-query.dto';
+import { UpdateEmployeeCompetencyGradeDto } from './dto/update-employee-competency-grade.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeesService } from './employees.service';
 import { EmployeeView } from './interfaces/employee-view.interface';
@@ -66,12 +67,13 @@ export class EmployeesController {
   }
 
   @Put(':employeeId/competencies/:competencyId')
-  @ApiOperation({ summary: 'Assign a competency to an employee' })
+  @ApiOperation({ summary: 'Assign or update an employee competency proficiency' })
   assignCompetency(
     @Param('employeeId', ParseUUIDPipe) employeeId: string,
     @Param('competencyId', ParseUUIDPipe) competencyId: string,
+    @Body() input: UpdateEmployeeCompetencyGradeDto,
   ): Promise<EmployeeView> {
-    return this.employeesService.assignCompetency(employeeId, competencyId);
+    return this.employeesService.assignCompetency(employeeId, competencyId, input.grade);
   }
 
   @Delete(':employeeId/competencies/:competencyId')

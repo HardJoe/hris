@@ -1,20 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
-  ArrayUnique,
   IsArray,
   IsDateString,
   IsEmail,
   IsEnum,
   IsOptional,
   IsString,
-  IsUUID,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { EmploymentStatus } from '../../common/enums/employment-status.enum';
 import { Gender } from '../../common/enums/gender.enum';
 import { Position } from '../../common/enums/position.enum';
+import { EmployeeCompetencyDto } from './employee-competency.dto';
 
 export class CreateEmployeeDto {
   @ApiProperty({ example: 'Ayu Pratama' })
@@ -55,10 +55,10 @@ export class CreateEmployeeDto {
   @IsDateString({ strict: true })
   hiredAt: string;
 
-  @ApiPropertyOptional({ type: [String], format: 'uuid' })
+  @ApiPropertyOptional({ type: [EmployeeCompetencyDto] })
   @IsOptional()
   @IsArray()
-  @ArrayUnique()
-  @IsUUID('4', { each: true })
-  competencyIds?: string[];
+  @Type(() => EmployeeCompetencyDto)
+  @ValidateNested({ each: true })
+  competencies?: EmployeeCompetencyDto[];
 }
