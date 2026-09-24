@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Pencil, Trash2 } from 'lucide-react';
 import { ConfirmDialog } from './confirm-dialog';
+import { StatusBadge } from './status-badge';
 import { apiRequest } from '@/lib/api-client';
 import type { Competency, Employee, EmploymentStatus, PagedResult, Position } from '@/lib/contracts';
 import { employmentStatuses, positionLabels, positions, statusLabels } from '@/lib/contracts';
@@ -107,7 +108,7 @@ export function EmployeesView() {
                 >
                   <td className="table-cell" data-label="Employee"><div className="name-cell"><span className="mini-avatar">{employee.name.charAt(0).toUpperCase()}</span><div><strong>{employee.name}</strong><span className="name-subtitle">{employee.email}</span></div></div></td>
                   <td className="table-cell" data-label="Position">{positionLabels[employee.position]}</td>
-                  <td className="table-cell" data-label="Status"><span className={`badge badge-${employee.status.toLowerCase()}`}>{statusLabels[employee.status]}</span></td>
+                  <td className="table-cell" data-label="Status"><StatusBadge status={employee.status} /></td>
                   <td className="table-cell" data-label="Competencies"><div className="tag-list">{employee.competencies.slice(0, 2).map((item) => <span className="tag" key={item.id}>{item.name} · {item.grade}</span>)}{employee.competencies.length > 2 ? <span className="tag">+{employee.competencies.length - 2}</span> : null}</div></td>
                   <td className="table-cell" data-label="Hired">{formatDate(employee.hiredAt)}</td>
                   <td className="table-cell responsive-actions-cell"><div className="actions" onClick={(event) => event.stopPropagation()}><Link className="icon-button" href={`/employees/${employee.id}/edit`} aria-label={`Edit ${employee.name}`}><Pencil size={17} strokeWidth={2} aria-hidden="true" /></Link><button className="icon-button" type="button" onClick={() => setDeleting(employee)} aria-label={`Delete ${employee.name}`}><Trash2 size={17} strokeWidth={2} aria-hidden="true" /></button></div></td>

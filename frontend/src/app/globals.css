@@ -97,7 +97,7 @@
 @utility mini-avatar { @apply grid size-[34px] shrink-0 place-items-center rounded-[10px] bg-hris-primary-soft font-bold text-hris-primary; }
 @utility badge { @apply inline-flex items-center rounded-full px-2 py-[3px] text-xs font-bold whitespace-nowrap; }
 @utility badge-active { @apply bg-[#ecfdf3] text-[#067647]; }
-@utility badge-inactive { @apply bg-[#eef1ef] text-[#5d6b62]; }
+@utility badge-inactive { @apply bg-[#fef3f2] text-[#b42318]; }
 @utility badge-grade { @apply bg-[#eff8ff] text-[#175cd3]; }
 @utility tag-list { @apply flex min-w-[160px] flex-wrap gap-[5px]; }
 @utility tag { @apply rounded-md border border-hris-line bg-white px-[7px] py-0.5 text-xs whitespace-nowrap; }

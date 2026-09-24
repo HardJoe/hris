@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { ConfirmDialog } from './confirm-dialog';
+import { StatusBadge } from './status-badge';
 import { apiRequest, downloadFile } from '@/lib/api-client';
 import type { Employee } from '@/lib/contracts';
-import { genderLabels, positionLabels, statusLabels } from '@/lib/contracts';
+import { genderLabels, positionLabels } from '@/lib/contracts';
 
 export function EmployeeDetail({ employeeId }: { employeeId: string }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -65,7 +66,7 @@ export function EmployeeDetail({ employeeId }: { employeeId: string }) {
         <aside className="card detail-card">
           <h2 className="detail-title">Employment</h2>
           <dl className="details details-single">
-            <div><dt className="detail-term">Status</dt><dd className="detail-description"><span className={`badge badge-${employee.status.toLowerCase()}`}>{statusLabels[employee.status]}</span></dd></div>
+            <div><dt className="detail-term">Status</dt><dd className="detail-description"><StatusBadge status={employee.status} /></dd></div>
             <div><dt className="detail-term">Record created</dt><dd className="detail-description">{formatTimestamp(employee.createdAt)}</dd></div>
             <div><dt className="detail-term">Last updated</dt><dd className="detail-description">{formatTimestamp(employee.updatedAt)}</dd></div>
           </dl>
