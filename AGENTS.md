@@ -50,6 +50,7 @@ This is a simple HRIS application with the following modules:
 
 - Both backends must provide the same API contract: endpoints, authentication, validation, and request/response formats. Store the contract in `docs/`; OpenAPI/Swagger is recommended.
 - Keep each application's dependencies in its own directory. Node.js and Spring Boot must not share dependencies or build configuration.
-- During development, run the frontend and only one backend at a time. Node.js and Spring Boot do not need to run simultaneously except when comparing the implementations.
+- Never run a frontend process or frontend verification command at the same time as a backend process or backend verification command. Run frontend and backend work strictly sequentially to limit resource usage.
+- Never run the Node.js and Spring Boot backends simultaneously except when the user explicitly requests an implementation comparison.
 - Run the entire project in WSL. Keep the source code in the WSL Linux filesystem—for example, `~/compnet/hris`—use VS Code Remote - WSL from Windows, and access applications in a Windows browser through `localhost`.
 - With 16 GB of RAM, limit WSL resources if necessary and avoid running both backends simultaneously. PostgreSQL, the React frontend, and one backend are sufficient for everyday development.
