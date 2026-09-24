@@ -18,9 +18,9 @@ export function DashboardView() {
 
   const headline: Array<{ label: string; value: number; note: string }> = [
     { label: 'Current employees', value: data.totalEmployees, note: 'Active workforce' },
-    { label: 'Junior programmers', value: data.employeesByPosition.JUNIOR_PROGRAMMER, note: 'Active employees' },
-    { label: 'Mid-level programmers', value: data.employeesByPosition.MID_PROGRAMMER, note: 'Active employees' },
-    { label: 'Senior programmers', value: data.employeesByPosition.SENIOR_PROGRAMMER, note: 'Active employees' },
+    { label: 'Recent hires', value: data.newEmployees.lastOneMonth, note: 'Last month' },
+    { label: 'Recent hires', value: data.newEmployees.lastThreeMonths, note: 'Last three months' },
+    { label: 'Competencies', value: data.employeesByCompetency.length, note: 'Competency records' },
   ];
 
   return (
@@ -47,13 +47,6 @@ export function DashboardView() {
           </ul>
         </section>
         <section className="card">
-          <div className="card-header"><h2 className="card-title">Recent hires</h2><p className="card-description">Active employees by hire date</p></div>
-          <ul className="metric-list">
-            <li className="metric-row"><span className="metric-name"><span className="metric-dot" />Last month</span><span className="metric-count">{data.newEmployees.lastOneMonth}</span></li>
-            <li className="metric-row"><span className="metric-name"><span className="metric-dot" />Last three months</span><span className="metric-count">{data.newEmployees.lastThreeMonths}</span></li>
-          </ul>
-        </section>
-        <section className="card col-span-full">
           <div className="card-header"><h2 className="card-title">Employees by competency</h2><p className="card-description">Active employees assigned to each competency</p></div>
           {data.employeesByCompetency.length ? (
             <ul className="metric-list">
@@ -62,6 +55,13 @@ export function DashboardView() {
               ))}
             </ul>
           ) : <div className="empty-state">No competencies have been created yet.</div>}
+        </section>
+        <section className="card col-span-full">
+          <div className="card-header"><h2 className="card-title">Recent hires</h2><p className="card-description">Active employees by hire date</p></div>
+          <ul className="metric-list">
+            <li className="metric-row"><span className="metric-name"><span className="metric-dot" />Last month</span><span className="metric-count">{data.newEmployees.lastOneMonth}</span></li>
+            <li className="metric-row"><span className="metric-name"><span className="metric-dot" />Last three months</span><span className="metric-count">{data.newEmployees.lastThreeMonths}</span></li>
+          </ul>
         </section>
       </div>
     </>
