@@ -145,13 +145,13 @@
 @utility modal-actions { @apply mt-5 flex justify-end gap-2; }
 
 @media (max-width: 1000px) { .stats-grid { @apply grid-cols-2; } .detail-grid { @apply grid-cols-1; } }
-@media (max-width: 760px) {
+@media (max-width: 1023px) {
   .login-page { @apply grid-cols-1; } .login-brand { @apply hidden; } .app-layout { @apply block; }
-  .sidebar { @apply hidden; } .mobile-header { @apply flex items-center justify-between bg-[#10291f] px-4 py-3 text-white; }
+  .sidebar { @apply hidden; } .mobile-header { @apply flex items-center gap-2 bg-[#10291f] px-4 py-3 text-white; }
   .mobile-brand { @apply gap-2.5 text-[17px]; } .mobile-brand .brand-icon { @apply size-8 rounded-lg; }
   .mobile-menu-trigger, .drawer-close { @apply grid size-10 place-items-center rounded-lg border-0 bg-transparent text-2xl leading-none text-white hover:bg-white/10; }
-  .drawer-root { @apply fixed inset-0 z-50 block; } .drawer-backdrop { @apply absolute inset-0 h-full w-full border-0 bg-[rgb(10_24_17_/_48%)] opacity-0 transition-opacity duration-200 ease-out; }
-  .drawer { @apply relative flex h-full w-[min(320px,calc(100vw-48px))] -translate-x-full flex-col bg-[#10291f] px-4 py-6 text-white shadow-[12px_0_32px_rgb(0_0_0_/_24%)] transition-transform duration-200 ease-out; }
+  .drawer-root { @apply fixed inset-0 z-50 block; } .drawer-backdrop { @apply absolute inset-0 h-full w-full border-0 bg-[rgb(10_24_17_/_48%)] opacity-0 transition-opacity duration-250 ease-out; }
+  .drawer { @apply relative flex h-full w-[min(240px,calc(100vw-48px))] -translate-x-full flex-col bg-[#10291f] px-4 py-6 text-white shadow-[12px_0_32px_rgb(0_0_0_/_24%)] transition-transform duration-250 ease-out; }
   .drawer-root-open .drawer-backdrop { @apply opacity-100; } .drawer-root-open .drawer { @apply translate-x-0; }
   .drawer-close { @apply absolute top-4 right-3; } .drawer .sidebar-brand { @apply pr-10; }
   .drawer .sidebar-footer { @apply mt-auto; } .drawer .account-menu { @apply bottom-[calc(100%+8px)]; }

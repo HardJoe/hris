@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   function closeMobileDrawer() {
     setMobileDrawerOpen(false);
     if (drawerCloseTimerRef.current) clearTimeout(drawerCloseTimerRef.current);
-    drawerCloseTimerRef.current = setTimeout(() => setMobileDrawerVisible(false), 200);
+    drawerCloseTimerRef.current = setTimeout(() => setMobileDrawerVisible(false), 250);
   }
 
   async function logout() {
@@ -72,9 +72,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="app-layout">
       <header className="mobile-header">
-        <Link className="brand-mark mobile-brand" href="/dashboard" aria-label="HRIS dashboard">
-          <span className="brand-icon">H</span><span>HRIS</span>
-        </Link>
         <button
           className="mobile-menu-trigger"
           type="button"
@@ -85,6 +82,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         >
           <span aria-hidden="true">☰</span>
         </button>
+        <Link className="brand-mark mobile-brand" href="/dashboard" aria-label="HRIS dashboard">
+          <span className="brand-icon">H</span><span>HRIS</span>
+        </Link>
       </header>
       {mobileDrawerVisible && (
         <div className={`drawer-root ${mobileDrawerOpen ? 'drawer-root-open' : ''}`}>
