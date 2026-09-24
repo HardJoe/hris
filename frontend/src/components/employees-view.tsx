@@ -88,8 +88,8 @@ export function EmployeesView() {
           <select className="select toolbar-select" aria-label="Filter by competency" value={competencyId} onChange={(event) => { setCompetencyId(event.target.value); setPage(1); }}><option value="">All competencies</option>{competencies.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select>
         </div>
         {error ? <div className="error-state" role="alert">{error}<br /><button className="button button-quiet" type="button" onClick={() => void load()}>Try again</button></div> : !result ? <div className="loading-state">Loading employees…</div> : result.items.length === 0 ? <div className="empty-state">No employees match these filters.</div> : (
-          <div className="table-wrap">
-            <table className="table">
+          <div className="table-wrap responsive-table-wrap">
+            <table className="table responsive-table employee-table">
               <thead><tr><th className="table-heading">Employee</th><th className="table-heading">Position</th><th className="table-heading">Status</th><th className="table-heading">Competencies</th><th className="table-heading">Hired</th><th className="table-heading"><span className="sr-only">Actions</span></th></tr></thead>
               <tbody>{result.items.map((employee) => (
                 <tr
@@ -105,12 +105,12 @@ export function EmployeesView() {
                     }
                   }}
                 >
-                  <td className="table-cell"><div className="name-cell"><span className="mini-avatar">{employee.name.charAt(0).toUpperCase()}</span><div><strong>{employee.name}</strong><span className="name-subtitle">{employee.email}</span></div></div></td>
-                  <td className="table-cell">{positionLabels[employee.position]}</td>
-                  <td className="table-cell"><span className={`badge badge-${employee.status.toLowerCase()}`}>{statusLabels[employee.status]}</span></td>
-                  <td className="table-cell"><div className="tag-list">{employee.competencies.slice(0, 2).map((item) => <span className="tag" key={item.id}>{item.name} · {item.grade}</span>)}{employee.competencies.length > 2 ? <span className="tag">+{employee.competencies.length - 2}</span> : null}</div></td>
-                  <td className="table-cell">{formatDate(employee.hiredAt)}</td>
-                  <td className="table-cell"><div className="actions" onClick={(event) => event.stopPropagation()}><Link className="icon-button" href={`/employees/${employee.id}/edit`} aria-label={`Edit ${employee.name}`}><Pencil size={17} strokeWidth={2} aria-hidden="true" /></Link><button className="icon-button" type="button" onClick={() => setDeleting(employee)} aria-label={`Delete ${employee.name}`}><Trash2 size={17} strokeWidth={2} aria-hidden="true" /></button></div></td>
+                  <td className="table-cell" data-label="Employee"><div className="name-cell"><span className="mini-avatar">{employee.name.charAt(0).toUpperCase()}</span><div><strong>{employee.name}</strong><span className="name-subtitle">{employee.email}</span></div></div></td>
+                  <td className="table-cell" data-label="Position">{positionLabels[employee.position]}</td>
+                  <td className="table-cell" data-label="Status"><span className={`badge badge-${employee.status.toLowerCase()}`}>{statusLabels[employee.status]}</span></td>
+                  <td className="table-cell" data-label="Competencies"><div className="tag-list">{employee.competencies.slice(0, 2).map((item) => <span className="tag" key={item.id}>{item.name} · {item.grade}</span>)}{employee.competencies.length > 2 ? <span className="tag">+{employee.competencies.length - 2}</span> : null}</div></td>
+                  <td className="table-cell" data-label="Hired">{formatDate(employee.hiredAt)}</td>
+                  <td className="table-cell responsive-actions-cell"><div className="actions" onClick={(event) => event.stopPropagation()}><Link className="icon-button" href={`/employees/${employee.id}/edit`} aria-label={`Edit ${employee.name}`}><Pencil size={17} strokeWidth={2} aria-hidden="true" /></Link><button className="icon-button" type="button" onClick={() => setDeleting(employee)} aria-label={`Delete ${employee.name}`}><Trash2 size={17} strokeWidth={2} aria-hidden="true" /></button></div></td>
                 </tr>
               ))}</tbody>
             </table>
