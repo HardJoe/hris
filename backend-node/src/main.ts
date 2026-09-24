@@ -9,10 +9,9 @@ import { API_PREFIX } from './common/constants/api.constants';
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseEnvelopeInterceptor } from './common/interceptors/response-envelope.interceptor';
 
-async function bootstrap(): Promise<void> {
+export async function createApp(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { bodyParser: false });
   const config = app.get(ConfigService);
-  const port = config.getOrThrow<number>('PORT');
 
   app.use(helmet());
   app.useBodyParser('json', { limit: '1mb' });
@@ -22,7 +21,7 @@ async function bootstrap(): Promise<void> {
       .getOrThrow<string>('CORS_ORIGINS')
       .split(',')
       .map((origin) => origin.trim()),
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Authorization', 'Content-Type'],
     credentials: false,
     maxAge: 600,
@@ -50,8 +49,16 @@ async function bootstrap(): Promise<void> {
     SwaggerModule.setup('docs', app, document, { jsonDocumentUrl: 'docs/openapi.json' });
   }
 
+  return app;
+}
+
+async function bootstrap(): Promise<void> {
+  const app = await createApp();
+  const config = app.get(ConfigService);
+  const port = config.getOrThrow<number>('PORT');
+
   await app.listen(port, '0.0.0.0');
   Logger.log(`HRIS API listening on port ${port}`, 'Bootstrap');
 }
 
-void bootstrap();
+if (require.main === module) void bootstrap();

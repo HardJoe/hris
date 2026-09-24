@@ -21,5 +21,12 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
+  {
+    files: ['test/**/*.e2e-spec.ts'],
+    rules: {
+      // SuperTest intentionally exposes untyped JSON response bodies at the HTTP boundary.
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+    },
+  },
 );
-

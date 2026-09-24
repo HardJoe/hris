@@ -1,0 +1,14 @@
+services:
+  database-e2e:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: hris_e2e
+      POSTGRES_USER: hris_e2e
+      POSTGRES_PASSWORD: hris_e2e
+    ports:
+      - "127.0.0.1:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hris_e2e -d hris_e2e"]
+      interval: 2s
+      timeout: 3s
+      retries: 20

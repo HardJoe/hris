@@ -11,6 +11,7 @@
     "lint": "eslint \"{src,test}/**/*.ts\" --max-warnings=0",
     "test": "jest --runInBand",
     "test:cov": "jest --coverage --runInBand",
+    "test:e2e": "jest --config test/jest-e2e.config.cjs --runInBand",
     "migration:run": "tsx src/database/run-migrations.ts",
     "migration:revert": "tsx src/database/revert-migration.ts",
     "seed": "tsx src/database/seed.ts"
@@ -49,6 +50,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.0",
     "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^7.2.1",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "jest": "^30.2.0",
