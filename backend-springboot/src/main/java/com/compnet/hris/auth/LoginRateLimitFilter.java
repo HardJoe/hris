@@ -10,6 +10,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,6 +23,7 @@ public class LoginRateLimitFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
     private final Clock clock;
 
+    @Autowired
     public LoginRateLimitFilter(ObjectMapper objectMapper) { this(objectMapper, Clock.systemUTC()); }
     LoginRateLimitFilter(ObjectMapper objectMapper, Clock clock) {
         this.objectMapper = objectMapper; this.clock = clock;
