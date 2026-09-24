@@ -1,0 +1,19 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { IsEnum, IsString, MaxLength, MinLength } from 'class-validator';
+import { Grade } from '../../common/enums/grade.enum';
+
+export class CreateCompetencyDto {
+  @ApiProperty({ example: 'Spring Boot' })
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : value,
+  )
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  name: string;
+
+  @ApiProperty({ enum: Grade, example: Grade.A })
+  @IsEnum(Grade)
+  grade: Grade;
+}

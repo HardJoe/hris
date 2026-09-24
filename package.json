@@ -1,0 +1,18 @@
+{
+  "name": "hris-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend-node"
+  ],
+  "scripts": {
+    "backend:build": "npm run build --workspace backend-node",
+    "backend:lint": "npm run lint --workspace backend-node",
+    "backend:test": "npm run test --workspace backend-node"
+  },
+  "engines": {
+    "node": ">=24.11.0",
+    "npm": ">=11.0.0"
+  }
+}
+
