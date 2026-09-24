@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { ConfirmDialog } from './confirm-dialog';
 import { apiRequest } from '@/lib/api-client';
 import type { Competency, Employee, EmploymentStatus, PagedResult, Position } from '@/lib/contracts';
@@ -10,6 +12,7 @@ import { employmentStatuses, positionLabels, positions, statusLabels } from '@/l
 const PAGE_SIZE = 10;
 
 export function EmployeesView() {
+  const router = useRouter();
   const [result, setResult] = useState<PagedResult<Employee> | null>(null);
   const [competencies, setCompetencies] = useState<Competency[]>([]);
   const [searchInput, setSearchInput] = useState('');
@@ -89,13 +92,25 @@ export function EmployeesView() {
             <table className="table">
               <thead><tr><th className="table-heading">Employee</th><th className="table-heading">Position</th><th className="table-heading">Status</th><th className="table-heading">Competencies</th><th className="table-heading">Hired</th><th className="table-heading"><span className="sr-only">Actions</span></th></tr></thead>
               <tbody>{result.items.map((employee) => (
-                <tr className="table-row" key={employee.id}>
+                <tr
+                  className="table-row table-row-link"
+                  key={employee.id}
+                  role="link"
+                  tabIndex={0}
+                  onClick={() => router.push(`/employees/${employee.id}`)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      router.push(`/employees/${employee.id}`);
+                    }
+                  }}
+                >
                   <td className="table-cell"><div className="name-cell"><span className="mini-avatar">{employee.name.charAt(0).toUpperCase()}</span><div><strong>{employee.name}</strong><span className="name-subtitle">{employee.email}</span></div></div></td>
                   <td className="table-cell">{positionLabels[employee.position]}</td>
                   <td className="table-cell"><span className={`badge badge-${employee.status.toLowerCase()}`}>{statusLabels[employee.status]}</span></td>
                   <td className="table-cell"><div className="tag-list">{employee.competencies.slice(0, 2).map((item) => <span className="tag" key={item.id}>{item.name} · {item.grade}</span>)}{employee.competencies.length > 2 ? <span className="tag">+{employee.competencies.length - 2}</span> : null}</div></td>
                   <td className="table-cell">{formatDate(employee.hiredAt)}</td>
-                  <td className="table-cell"><div className="actions"><Link className="icon-button" href={`/employees/${employee.id}`} aria-label={`View ${employee.name}`}>↗</Link><Link className="icon-button" href={`/employees/${employee.id}/edit`} aria-label={`Edit ${employee.name}`}>✎</Link><button className="icon-button" type="button" onClick={() => setDeleting(employee)} aria-label={`Delete ${employee.name}`}>×</button></div></td>
+                  <td className="table-cell"><div className="actions" onClick={(event) => event.stopPropagation()}><Link className="icon-button" href={`/employees/${employee.id}/edit`} aria-label={`Edit ${employee.name}`}><Pencil size={17} strokeWidth={2} aria-hidden="true" /></Link><button className="icon-button" type="button" onClick={() => setDeleting(employee)} aria-label={`Delete ${employee.name}`}><Trash2 size={17} strokeWidth={2} aria-hidden="true" /></button></div></td>
                 </tr>
               ))}</tbody>
             </table>

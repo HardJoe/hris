@@ -91,6 +91,7 @@
 @utility table-heading { @apply whitespace-nowrap bg-[#f8faf9] px-4 py-[11px] text-xs font-semibold tracking-[.02em] text-hris-muted uppercase; }
 @utility table-cell { @apply border-t border-hris-line px-4 py-3.5 align-middle; }
 @utility table-row { @apply hover:bg-[#fbfcfb]; }
+@utility table-row-link { @apply cursor-pointer; }
 @utility name-cell { @apply flex min-w-[190px] items-center gap-[11px]; }
 @utility name-subtitle { @apply block text-xs text-hris-muted; }
 @utility mini-avatar { @apply grid size-[34px] shrink-0 place-items-center rounded-[10px] bg-hris-primary-soft font-bold text-hris-primary; }
@@ -157,6 +158,8 @@
   .content { @apply px-4 pt-[22px] pb-9; }
   .dashboard-grid, .form-grid { @apply grid-cols-1; } .field-full { @apply col-auto; } .page-header { @apply flex-col items-stretch; }
   .header-actions > .button { @apply flex-1; } .assignment-row { @apply grid-cols-[1fr_90px_auto]; }
+  .table { @apply min-w-[760px]; } .competency-table { @apply min-w-[560px]; }
+  .toolbar-select { @apply w-full; }
 }
-@media (max-width: 500px) { .nav-link-label { @apply hidden; } .stats-grid, .details { @apply grid-cols-1; } .table-footer { @apply flex-col items-start; } }
+@media (max-width: 500px) { .nav-link-label { @apply hidden; } .stats-grid, .details { @apply grid-cols-1; } .table-footer { @apply flex-col items-start; } .pagination { @apply w-full justify-between; } }
 @media (prefers-reduced-motion: reduce) { .drawer, .drawer-backdrop { @apply transition-none; } }
