@@ -3,8 +3,25 @@ module.exports = {
   rootDir: '.',
   testRegex: '.*\\.spec\\.ts$',
   transform: { '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: 'tsconfig.json' }] },
-  collectCoverageFrom: ['src/**/*.ts', '!src/main.ts', '!src/**/*.module.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/main.ts',
+    '!src/**/*.module.ts',
+    '!src/**/*.dto.ts',
+    '!src/**/*.entity.ts',
+    '!src/common/constants/**',
+    '!src/common/decorators/**',
+    '!src/common/enums/**',
+    '!src/common/interfaces/**',
+    '!src/database/data-source.ts',
+    '!src/database/run-migrations.ts',
+    '!src/database/revert-migration.ts',
+    '!src/database/seed.ts',
+    '!src/database/migrations/**',
+  ],
+  coverageThreshold: {
+    global: { branches: 60, functions: 85, lines: 85, statements: 85 },
+  },
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
 };
-
