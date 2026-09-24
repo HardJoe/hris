@@ -27,7 +27,7 @@ export function DashboardView() {
     <>
       <div className="stats-grid">
         {headline.map((item) => (
-          <article className="card stat" key={item.label}>
+          <article className="card stat" key={`${item.label}-${item.note}`}>
             <div className="stat-label">{item.label}</div>
             <div className="stat-value">{item.value}</div>
             <div className="stat-note">{item.note}</div>
