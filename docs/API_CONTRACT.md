@@ -4,7 +4,7 @@ Base path: `/api/v1`
 Content type: `application/json`, except certificate upload/download.  
 Authentication: `Authorization: Bearer <access-token>` for every business endpoint.
 
-The running NestJS service also exposes an OpenAPI document at `/docs/openapi.json` when `SWAGGER_ENABLED=true`. The future Spring Boot service must preserve the routes, enum values, validation behavior, envelopes, and status codes described here.
+Both backend implementations expose an OpenAPI document at `/docs/openapi.json`. They preserve the routes, enum values, validation behavior, envelopes, and status codes described here.
 
 ## Response format
 

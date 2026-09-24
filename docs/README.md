@@ -1,5 +1,7 @@
 # HRIS Node.js Backend — Technical Overview
 
+This page covers the Node implementation. The equivalent Java implementation is summarized in [Spring Boot Backend — Interviewer Overview](SPRING_BOOT.md).
+
 Related documentation: [API contract](API_CONTRACT.md), [database schema and seed data](DATABASE_SCHEMA.md), and [project assumptions](ASSUMPTIONS.md).
 
 ## What is implemented
@@ -28,7 +30,7 @@ Modules are grouped by business capability (`auth`, `employees`, `competencies`,
 
 NestJS was selected because its dependency injection and controller/service/module model has a direct conceptual mapping to Spring Boot. TypeORM was selected over Prisma because its entity/repository/transaction model maps more directly to JPA/Hibernate.
 
-| Node.js implementation | Future Spring Boot equivalent |
+| Node.js implementation | Spring Boot implementation |
 | --- | --- |
 | Nest module | Spring configuration/package boundary |
 | Controller decorator | `@RestController` |

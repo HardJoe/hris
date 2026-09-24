@@ -1,6 +1,6 @@
 # HRIS Monorepo
 
-The repository contains a security-focused Next.js frontend and Node.js API built with NestJS, TypeORM, PostgreSQL, and Docker. Its module boundaries and API contract are intentionally designed to map cleanly to a future Spring Boot implementation.
+The repository contains a security-focused Next.js frontend and two interchangeable APIs: NestJS/TypeORM and Spring Boot/JPA. Both use PostgreSQL and the same HTTP contract.
 
 ## Quick start
 
@@ -39,3 +39,9 @@ docker compose down
 Do not commit `backend-node/.env`. Use a secret manager and set `SWAGGER_ENABLED=false` outside a controlled development environment.
 
 See [the backend interviewer overview](docs/README.md), [the frontend interviewer overview](docs/FRONTEND.md), and [the API contract](docs/API_CONTRACT.md).
+
+The alternative Java stack is documented in [the Spring Boot interviewer overview](docs/SPRING_BOOT.md). Run only one backend at a time. To use Spring Boot, copy `backend-springboot/.env.example` to `backend-springboot/.env`, stop the Node stack, and run:
+
+```bash
+docker compose -f docker-compose.springboot.yml up --build -d
+```
