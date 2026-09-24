@@ -1,5 +1,7 @@
 # HRIS Node.js Backend — Technical Overview
 
+Related documentation: [API contract](API_CONTRACT.md) and [database schema and seed data](DATABASE_SCHEMA.md).
+
 ## What is implemented
 
 - Administrator login using email/password and short-lived JWT access tokens.
