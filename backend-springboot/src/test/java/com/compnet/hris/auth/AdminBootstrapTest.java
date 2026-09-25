@@ -27,15 +27,18 @@ class AdminBootstrapTest {
     }
 
     @Test
-    void createsMissingAdministratorAndLeavesExistingOneUntouched() {
+    void createsMissingAdministratorAndSynchronizesExistingPassword() {
         when(users.findByEmailIgnoreCase("admin@example.com")).thenReturn(Optional.empty());
         when(passwords.encode("long-enough-password")).thenReturn("hash");
         bootstrap(" Admin@Example.com ", "long-enough-password").run(new DefaultApplicationArguments());
         verify(users).save(any());
 
-        when(users.findByEmailIgnoreCase("existing@example.com")).thenReturn(Optional.of(
-                new com.compnet.hris.user.User("existing@example.com", "hash")));
+        var existing = new com.compnet.hris.user.User("existing@example.com", "old-hash");
+        when(users.findByEmailIgnoreCase("existing@example.com")).thenReturn(Optional.of(existing));
+        when(passwords.matches("long-enough-password", "old-hash")).thenReturn(false);
         bootstrap("existing@example.com", "long-enough-password").run(new DefaultApplicationArguments());
+        verify(passwords).matches("long-enough-password", "old-hash");
+        verify(users).save(existing);
     }
 
     @Test

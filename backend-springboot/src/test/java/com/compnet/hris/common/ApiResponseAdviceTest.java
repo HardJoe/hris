@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -40,5 +41,17 @@ class ApiResponseAdviceTest {
         assertThat(advice.supports(parameter, (Class) HttpMessageConverter.class)).isFalse();
         assertThat(advice.supports(parameter, (Class) HttpMessageConverter.class)).isFalse();
         assertThat(advice.supports(parameter, (Class) HttpMessageConverter.class)).isFalse();
+    }
+
+    @Test
+    void leavesSwaggerConfigurationUnwrapped() {
+        MethodParameter parameter = mock(MethodParameter.class);
+        when(parameter.getParameterType()).thenReturn((Class) java.util.Map.class);
+        ServerHttpRequest request = mock(ServerHttpRequest.class);
+        when(request.getURI()).thenReturn(URI.create("http://localhost/docs/openapi.json/swagger-config"));
+        var config = java.util.Map.of("url", "/docs/openapi.json");
+
+        assertThat(advice.beforeBodyWrite(config, parameter, MediaType.APPLICATION_JSON,
+                (Class) HttpMessageConverter.class, request, mock(ServerHttpResponse.class))).isSameAs(config);
     }
 }

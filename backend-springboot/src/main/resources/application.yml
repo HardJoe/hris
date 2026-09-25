@@ -41,6 +41,7 @@ springdoc:
     path: /docs/openapi.json
   swagger-ui:
     path: /docs
+    url: /docs/openapi.json
 
 hris:
   jwt:

@@ -25,6 +25,7 @@ public class User {
     public UUID getId() { return id; }
     public String getEmail() { return email; }
     public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 }

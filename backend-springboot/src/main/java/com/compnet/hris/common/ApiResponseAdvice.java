@@ -22,7 +22,8 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> converterType, ServerHttpRequest request,
             ServerHttpResponse response) {
         if (body instanceof ApiEnvelope<?> || body instanceof GlobalExceptionHandler.ErrorEnvelope
-                || !MediaType.APPLICATION_JSON.includes(mediaType)) {
+                || !MediaType.APPLICATION_JSON.includes(mediaType)
+                || (request.getURI() != null && request.getURI().getPath().endsWith("/swagger-config"))) {
             return body;
         }
         return new ApiEnvelope<>(body);
